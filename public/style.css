@@ -1,0 +1,74 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+html,body{
+    width: 100%;
+    height: 100%;
+    background-color: blueviolet;
+}
+
+canvas{
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
+.comentarios{
+    width: 99%;
+    height: 50%;
+    border: 2px black solid;
+    margin-bottom: 20px;
+    display: block;
+    overflow: scroll;
+}
+
+ul{
+    list-style: none;
+}
+
+form{
+    width: 99.5%;
+    bottom: 0px;
+    position: absolute;
+    display: block;
+}
+
+form input{
+    width: 100%;
+}
+/* .wrapper {
+    margin: 0 auto;
+}
+
+.column {
+       float: left;
+       width: 50%;
+} */
+#ulComentarios{
+    /* background-color: white; */
+    color: white;
+}
+#palabra{
+    display: block;
+    width: 100%;
+    height: 25px;
+}
+#eraser{
+    width: 25px;
+    height: 25px;
+}
+.columnComentarios{
+    width: 100%;
+}
+.podio{
+    background-color: white;
+}
+#contador{
+    color: white;
+    font-size: medium;
+    right: 10px;
+    position: absolute;
+}
