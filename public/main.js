@@ -2,7 +2,7 @@ $(document).ready(function(){
     var socket = io();
     socket.on('faltaJug', function(){
         alert("Son necesarios al menos 2 jugadores");
-        location.reload();
+        // location.reload();
     });
     var usuario = prompt("Ingresa el nombre de usuario");
     var canvas = document.getElementById("canvas");
@@ -10,30 +10,51 @@ $(document).ready(function(){
     canvas.height = window.innerHeight/2;
     var context = canvas.getContext("2d");
     var posicion = {};
-    var persona=0;
     // var io = SocketIO.listen(server);
-    const turnos=10;
-    var contTurno=0;
-    var tiempo=60;
-    var dibujando = false;
-    var palabras = ["señal", "alto", "perro", "gato", "lentes", "cerveza", "saltar", "xbox", "youtube", "zelda"];
+    var tiempo;
+    
+    document.getElementById('btnComenzar').onclick = function(){
+        socket.emit('comienzoJuego');
+    };
+
+    document.getElementById("canvas").disabled = true;
+
     
     socket.on('inicioJuego', function(jugadores){
-        persona=jugadores;
-        do {
-            persona++;
-            if(persona > jugadores){
-                persona=0;
-            }
-            var palabra = palabras[Math.round(Math.random()*palabras.length)];
-            $("#ulComentarios").append(`<li><b>Comienza el juego</b></li>`);
-            debugger;
-            io.clients[persona].send(alert("Dibuja lo siguiente: "+palabra));
+        // do {
+        //     persona++;
+        //     if(persona > jugadores.length){
+        //         persona=0;
+        //     }
+        //     var palabra = palabras[Math.round(Math.random()*palabras.length)];
+        //     $("#ulComentarios").append(`<li><b>Comienza el juego</b></li>`);
+        //     io.clients[persona].send(alert("Dibuja lo siguiente: "+palabra));
             
-            contTurno++;
-            document.getElementById('contador').innerHTML = tiempo;
+        //     contTurno++;
+        //     document.getElementById('contador').innerHTML = tiempo;
 
-        } while (contTurno!=turnos);
+        // } while (contTurno!=turnos);
+        socket.on('juego', function(){
+            document.getElementById('palabra').disabled = false;
+            document.getElementById("canvas").disabled = true;
+            tiempo = 60;
+            for(var i = 0; i < tiempo; i++){
+                document.getElementById('contador').innerHTML = tiempo;
+                sleep(1000);
+                tiempo--;
+            }
+        });
+
+        socket.on('encontrado', function(puntos){
+            $("#ulComentarios").append(`<li><b>${puntos}</b></li>`)
+        });
+
+
+        socket.on('dibujante', function(data){
+            alert("Dibuja lo siguiente: "+data);
+            document.getElementById("canvas").disabled = false;
+            document.getElementById('palabra').disabled = true;
+        });
 
         $("#canvas").on("mousedown", onMouseDown);
         $("#canvas").on("mouseup", onMouseUp);
@@ -58,7 +79,8 @@ $(document).ready(function(){
             e.preventDefault();
             var data = {
                 username: usuario,
-                message: $("#palabra").val()
+                message: $("#palabra").val(),
+                tiempo: tiempo
             }
             socket.emit("intento palabra",data);
             $('#palabra').val('');
@@ -115,3 +137,7 @@ $(document).ready(function(){
         }
     });
 });
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

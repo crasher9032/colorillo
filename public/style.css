@@ -70,5 +70,5 @@ form input{
     color: white;
     font-size: medium;
     right: 10px;
-    position: absolute;
+    /* position: absolute; */
 }
